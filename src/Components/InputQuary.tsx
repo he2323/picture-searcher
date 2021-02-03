@@ -1,4 +1,6 @@
 import React from "react";
+import { FiSearch } from "react-icons/fi";
+import { IoMdClose } from "react-icons/io";
 import {
   Input,
   InputGroup,
@@ -9,7 +11,6 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import ListItemW from "./ListItemW";
-import { queryAllByRole } from "@testing-library/react";
 interface InputQuaryI {
   value: string;
   tips: string[];
@@ -28,20 +29,24 @@ const InputQuery = ({
 }: InputQuaryI) => {
   return (
     <Box w="40vw">
-      <InputGroup mt="4">
-        <InputLeftElement color="grey" children="$" />
+      <InputGroup
+        mt="4"
+        w="100%"
+        borderRadius={curlBorder ? "20px" : "5px"}
+        border="1px solid rgb(235,235,235)"
+      >
+        <InputLeftElement color="grey" children={<FiSearch />} />
         <Input
           type="text"
           size="md"
           placeholder="Search free hight-resolution photos"
-          borderRadius={curlBorder ? "xl" : "none"}
+          borderRadius={curlBorder ? "20px" : "5px"}
           bgColor={bg ? bg : "white"}
           value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             changeValue(e.currentTarget.value)
           }
-          color="grey"
-          isRequired={true}
+          color="black"
           onKeyUp={(e: React.KeyboardEvent) => {
             if (e.key === "Enter" && value.length > 2) {
               redirect();
@@ -49,16 +54,18 @@ const InputQuery = ({
             }
           }}
         />
-        <InputRightElement
-          onClick={() => changeValue("")}
-          children="X"
-          color="grey"
-          cursor="pointer"
-        />
+        {value ? (
+          <InputRightElement
+            onClick={() => changeValue("")}
+            children={<IoMdClose />}
+            color="grey"
+            cursor="pointer"
+          />
+        ) : null}
       </InputGroup>
       {value.length > 2 ? (
         <Box
-          borderRadius="5px"
+          borderRadius="20px"
           pos="absolute"
           zIndex="1"
           mt="4px"

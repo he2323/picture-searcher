@@ -4,9 +4,14 @@ const ListItemW = ({ value, click }: { value: string; click: () => void }) => {
   const [isOver, setIsOver] = useState(false);
   return (
     <ListItem
-      bgColor={isOver ? "grey" : "white"}
+      bgColor={isOver ? "lightgray" : "white"}
       onMouseEnter={() => setIsOver(true)}
       onMouseOut={() => setIsOver(false)}
+      pt="12px"
+      pb="12px"
+      pl="15px"
+      pr="5px"
+      transition="ease-in"
     >
       <Link
         onClick={() => {

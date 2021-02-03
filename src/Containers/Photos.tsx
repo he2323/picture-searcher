@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Flex, Grid, Heading, Box } from "@chakra-ui/react";
+import { useEffect, useState, useRef } from "react";
+import { Flex, Heading, Box, Spacer } from "@chakra-ui/react";
 import axios from "axios";
 import InputQuary from "../Components/InputQuary";
 import TagsShow from "../Components/TagsShow";
-import Modal from "../Components/Modal"
+import Modal from "../Components/Modal";
 interface PhotosI {
   redirect: () => void;
   quary: string;
@@ -53,13 +53,21 @@ const Photos = ({ quary, setQuary, tips, redirect, isQuary }: PhotosI) => {
   const [head, sethead] = useState("");
   const [photos, setPhotos] = useState([]);
   const [tags, setTags] = useState([]);
-  const photoFetch = async (query: string) => {
+  const [pageNumber, setpageNumber] = useState(1);
+  const endScroll = useRef();
+  const onScroll = (e: any) => {
+    const bottom =
+      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (bottom) {
+      photoFetch(head, pageNumber);
+    }
+  };
+  const photoFetch = async (query: string, page: number) => {
     const res = await axios.get(
-      `https://api.unsplash.com/search/photos/?query=${query}&client_id=nmgmXe-0waSIz6ZjGxuFbCC5p-zY-MTa6e4t1dt_pL4&per_page=100`
+      `https://api.unsplash.com/search/photos/?query=${query}&page=${page}&client_id=nmgmXe-0waSIz6ZjGxuFbCC5p-zY-MTa6e4t1dt_pL4&per_page=100`
     );
-
-    await setPhotos(res.data.results);
-console.log(res.data.results);
+    setpageNumber(pageNumber + 1);
+    await setPhotos([...photos, ...res.data.results]);
     return res.data.results;
   };
   useEffect(() => {
@@ -67,23 +75,24 @@ console.log(res.data.results);
       isQuary(false);
       const link: string = window.location.href;
       const head: string[] = link.split("/");
-      const lastElement: any = head.pop();
+      const lastElement: string = head.pop();
       sethead(lastElement);
-      const photos_E = await photoFetch(lastElement);
-      let cats: any[] = [];
-      photos_E.map((photo: any) => {
-        let newCats: any[] = [];
-        photo.tags.map((tag: any) => newCats.push(tag.title));
+      const photos_E = await photoFetch(lastElement, pageNumber);
+      let cats: string[] = [];
+      photos_E.map((photo: PhotoI) => {
+        let newCats: string[] = [];
+        photo.tags.map((tag: TagI) => newCats.push(tag.title));
         cats = [...cats, ...newCats];
       });
 
       const catSet: Set<string> = new Set(cats);
-      let catList: any[] = [];
+      let catList: string[] = [];
       catSet.forEach((value: string) => catList.push(value));
       setTags(catList);
     };
     initF();
   }, []);
+
   return (
     <Flex w="100vw" h="100vh" alignItems="center" direction="column">
       <InputQuary
@@ -91,17 +100,41 @@ console.log(res.data.results);
         changeValue={(value: string) => setQuary(value)}
         tips={tips}
         redirect={redirect}
-        bg={"lightgrey"}
+        bg={"rgb(235,235,235)"}
+        //za ciemny szary
         curlBorder={true}
       />
-      <Box w="70vw" mt="6" overflowY="auto" overflowX="hidden">
-        <Heading>{head}</Heading>
-        <TagsShow tags={tags} />
-        <Grid mt="4" templateColumns="repeat(auto, minmax(50px, 1fr))" gap={2}>
-          {photos.map((photo: PhotoI) => (
-              <Modal photo={photo}/>
-          ))}
-        </Grid>
+      <Box
+        w="70vw"
+        mt="6"
+        overflowY="auto"
+        overflowX="clip"
+        onScroll={onScroll}
+      >
+        <Heading mb="5px" textTransform="capitalize">
+          {head}
+        </Heading>
+        {photos.length > 0 ? (
+          <>
+            <TagsShow
+              tags={tags}
+              click={(value: string) => {
+                setQuary(value);
+                redirect();
+              }}
+            />
+            <Flex wrap="wrap" mt="4" w="100%" direction="row" justify="center">
+              {photos.map((photo: PhotoI, index: number) => (
+                <Box key={index} w="sm" m="1px">
+                  <Modal photo={photo} />
+                </Box>
+              ))}
+              <div ref={endScroll}></div>
+            </Flex>
+          </>
+        ) : (
+          "nie znaleziono zdjęć"
+        )}
       </Box>
     </Flex>
   );

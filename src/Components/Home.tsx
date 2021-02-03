@@ -1,4 +1,4 @@
-import { Flex, Heading, Text, Box, Spacer, Link } from "@chakra-ui/react";
+import { Flex, Heading, Text, Box, Spacer } from "@chakra-ui/react";
 
 import InputQuary from "./InputQuary";
 interface HomeI {
@@ -23,14 +23,15 @@ const Home = ({ quary, setQuary, tips, redirect }: HomeI) => {
         <Heading as="h1" size="2xl" mb="6">
           Unsplash
         </Heading>
-        <Spacer />
-        <Text>
+        <Text fontWeight="600">
           The internet's source of{" "}
-          <Link isExternal href="https:\\www.unsplash.com">
+          <Text as="u" fontWeight="200">
             freely-usable images.
-          </Link>
+          </Text>
         </Text>
-        <Text mb="6">Powered by creators everywhere.</Text>
+        <Text mb="6" fontWeight="500">
+          Powered by creators everywhere.
+        </Text>
         <Spacer />
         <InputQuary
           value={quary}
@@ -38,6 +39,13 @@ const Home = ({ quary, setQuary, tips, redirect }: HomeI) => {
           tips={tips}
           redirect={redirect}
         />
+        <Spacer />
+        <Flex direction="row" fontWeight="500">
+          Trending:{" "}
+          <Text fontWeight="200">
+            flower, wallpapers, backgrounds, happy, love
+          </Text>
+        </Flex>
       </Box>
     </Flex>
   );

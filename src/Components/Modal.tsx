@@ -9,15 +9,17 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
-  Button,
+  Image,
   Avatar,
   Text,
-  Spacer
+  Spacer,
+  Button,
 } from "@chakra-ui/react";
+import { FaHeart, FaShare, FaInfoCircle } from "react-icons/fa";
+import { GoPlusSmall } from "react-icons/go";
+import {ImLocation2} from "react-icons/im"
 import React from "react";
 import { PhotoI, TagI } from "../Containers/Photos";
-import Photo from "./Photo";
 interface ModalI {
   photo: PhotoI;
 }
@@ -27,28 +29,52 @@ const Modal = ({ photo }: ModalI) => {
     <>
       <Box onClick={onOpen} cursor="pointer">
         <img src={photo.urls.small} alt={photo.alt_description} />
-        <Flex direction="row">
-          {photo.tags.map((tag: TagI) => (
-            <Tag bg="gray.400" mr="1">
+        <Flex direction="row" wrap="wrap" mt="4px" mb="2px">
+          {photo.tags.map((tag: TagI, index: number) => (
+            <Tag key={index} bg="rgb(235,235,235)" mr="1" mb="4px">
               {tag.title}
             </Tag>
           ))}
         </Flex>
       </Box>
-      <Mod isOpen={isOpen} onClose={onClose} size="6xl">
+      <Mod isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader><Flex direction="row"><Avatar name={photo.user.name} src={photo.user.profile_image.small}/> <Text>{photo.user.name}</Text></Flex></ModalHeader>
-          <ModalCloseButton />
+          <ModalHeader>
+            <Flex direction="row">
+              <Avatar
+                name={photo.user.name}
+                src={photo.user.profile_image.small}
+                size="md"
+              />
+              <Text m="9px">{photo.user.name}</Text>
+              <Spacer />
+              <Button mr="15px">
+                <FaHeart />
+              </Button>
+              <Button>
+                <GoPlusSmall />
+              </Button>
+            </Flex>
+          </ModalHeader>
           <ModalBody>
-            <img src={photo.urls.regular} alt={photo.alt_description} />
+            <Image
+              m="0 auto"
+              boxSize="xl"
+              objectFit="cover"
+              src={photo.urls.regular}
+              alt={photo.alt_description}
+            />
           </ModalBody>
 
           <ModalFooter>
-              <Text>{photo.user.location}</Text><Spacer />
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
+            <Text fontWeight="600">
+              {photo.user.location ? (<Flex direction="row"><ImLocation2/>{photo.user.location}</Flex>) : "no location"}
+            </Text>
+            <Spacer />
+            <Button mr="7px"><FaShare /><Text p="4px">Share</Text></Button>
+            <Button><FaInfoCircle /><Text p="4px">Info</Text></Button>
+
           </ModalFooter>
         </ModalContent>
       </Mod>
