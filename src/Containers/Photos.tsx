@@ -64,9 +64,10 @@ const Photos = ({ quary, setQuary, tips, redirect, isQuary }: PhotosI) => {
   };
   const photoFetch = async (query: string, page: number) => {
     const res = await axios.get(
-      `https://api.unsplash.com/search/photos/?query=${query}&page=${page}&client_id=nmgmXe-0waSIz6ZjGxuFbCC5p-zY-MTa6e4t1dt_pL4&per_page=100`
+      `https://api.unsplash.com/search/photos/?query=${query}&page=${page}&client_id=nmgmXe-0waSIz6ZjGxuFbCC5p-zY-MTa6e4t1dt_pL4&per_page=30`
     );
     setpageNumber(pageNumber + 1);
+    console.log(photos);
     await setPhotos([...photos, ...res.data.results]);
     return res.data.results;
   };
@@ -133,7 +134,7 @@ const Photos = ({ quary, setQuary, tips, redirect, isQuary }: PhotosI) => {
             </Flex>
           </>
         ) : (
-          "nie znaleziono zdjęć"
+          "no picture finded"
         )}
       </Box>
     </Flex>
