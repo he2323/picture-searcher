@@ -37,7 +37,7 @@ const Modal = ({ photo }: ModalI) => {
           ))}
         </Flex>
       </Box>
-      <Mod isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
+      <Mod isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>

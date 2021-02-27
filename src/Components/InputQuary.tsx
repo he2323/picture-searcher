@@ -77,7 +77,10 @@ const InputQuery = ({
               <ListItemW
                 key={index}
                 value={value}
-                click={() => changeValue(value)}
+                click={() => {
+                  changeValue(value);
+                  redirect();
+                }}
               />
             ))}
             {tips.length < 1 && value.length > 2 ? (

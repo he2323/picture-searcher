@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import Home from "./Components/Home";
 import Photos from "./Containers/Photos";
-import axios from "axios";
 
 const App = () => {
   /*

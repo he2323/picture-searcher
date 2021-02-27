@@ -13,13 +13,7 @@ const ListItemW = ({ value, click }: { value: string; click: () => void }) => {
       pr="5px"
       transition="ease-in"
     >
-      <Link
-        onClick={() => {
-          click();
-          document.forms[0].submit();
-        }}
-        color="black"
-      >
+      <Link onClick={click} color="black">
         {value}
       </Link>
     </ListItem>
